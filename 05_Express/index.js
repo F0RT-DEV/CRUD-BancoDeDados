@@ -1,3 +1,4 @@
+//express e uma biblioteca back-end que facilita a criacao de servidores web
 import express from 'express';
 
 //App inicia o express
