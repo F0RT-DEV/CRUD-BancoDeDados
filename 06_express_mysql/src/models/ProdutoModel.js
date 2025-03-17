@@ -6,6 +6,30 @@ import mysql from 'mysql2/promise';
 //const conexao = mysql.createPool(db) criando uma função que irá conectar com o banco de dados
 const conexao = mysql.createPool(db);
 
+
+//função para adicionar um produto
+export const criandoProduto = async (nomeProduto) => {
+    console.log('ProdutoModel :: criandoProduto')
+    //const sql está inserindo um produto
+    const sql = `INSERT INTO produtos (nome_produto) VALUES (?)`;
+    const params = [nomeProduto];
+
+    try {
+        //console.log('teste');
+        const resposta = await conexao.query(sql,params);
+        //console.log('teste2');
+        //console.log(resposta);
+        return [200, {mensagem: 'Produto cadastrado com sucesso'}];
+    } catch (error) {
+        //console.log(error);
+        return [500,{
+            mensagem: 'Erro no Servidor',
+            code:error.code,
+            sql:error.sqlMessage
+        }
+    ]};
+}
+
 //criando uma função para mostrar os produtos da tabela produtos do banco de dados
 const mostrarProdutos = async () => {
     console.log('ProdutoModel :: mostrarProdutos');
@@ -31,20 +55,6 @@ const mostrarProdutos = async () => {
         ]};
 }
 
-//função para adicionar um produto
-const criandoProduto = async (nomeProduto) => {
-    console.log('ProdutoModel :: criandoProduto')
-    //const sql está inserindo um produto
-    const sql = `INSERT INTO produtos (nome_produto) VALUES (?)`;
-    const params = [nomeProduto];
-
-    try {
-        const resposta = await conexao.query(sql,params);
-        console.log(resposta);
-    } catch (error) {
-        console.error(error)
-    }
-}
 
 //função para atualizar um produto
 const atualizarProduto = async (id_produtos,nomeProduto) => {
@@ -56,9 +66,9 @@ const atualizarProduto = async (id_produtos,nomeProduto) => {
     const [resposta] = await conexao.query(sql);
     //console.log(resposta);
     if (resposta.affectedRows < 1) {
-        return [404, {mensagem:"Produtos não encontrado"}];
+        return [404, {mensagem:"Produtos atualizado com sucesso"}];
     }else{
-        return [200, {mensagem:'Produtos encontrado'}];
+        return [200, {mensagem:'Produtos não atualizado'}];
     }
 } catch (error) {
     //console.error(error);
@@ -79,11 +89,15 @@ const deletarProduto = async (id_produtos) => {
         const resposta = await conexao.query(sql,params);
         console.log(resposta);
         } catch (error) {
-            console.error(error)
-        }
+            return [500,{
+                mensagem: 'Erro no Servidor',
+                code:error.code,
+                sql:error.sqlMessage
+            }
+        ]};
 }
 
 //deletarProduto(2)
-//atualizarProduto(5,'laranja')
+//atualizarProduto(5,'limão')
 //criandoProduto('uva passa');
-console.log( await mostrarProdutos());
+//console.log( await mostrarProdutos());
