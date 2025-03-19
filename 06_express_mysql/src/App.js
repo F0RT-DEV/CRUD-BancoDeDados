@@ -1,5 +1,6 @@
 import express from 'express';
-import { createProduto } from './controllers/ProdutoController.js';
+import { createProduto, deleteProudto, readProduto, updateProduto } from './controllers/ProdutoController.js';
+
 
 const app = express(); // Inicializa o express
 const port = 3000;
@@ -12,6 +13,9 @@ app.get('/', (req, res) => {
 
 //CRUD produtos
 app.post('/produtos', createProduto)
+app.get('/produtos', readProduto)
+app.put('/produtos/:id_produto', updateProduto)
+app.put('/produtos/:id_produto', deleteProudto)
 
 
 app.listen(port, () => {

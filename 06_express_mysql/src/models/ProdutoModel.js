@@ -31,20 +31,15 @@ export const criandoProduto = async (nomeProduto) => {
 }
 
 //criando uma função para mostrar os produtos da tabela produtos do banco de dados
-const mostrarProdutos = async () => {
+export const mostrarProdutos = async () => {
     console.log('ProdutoModel :: mostrarProdutos');
     //const sql está pegando todos os produtos da tabela produtos
     const sql = 'SELECT * FROM produtos';
-
     //desenvolvendo os erros
     try {
         const [resposta] = await conexao.query(sql);
-        //console.log(resposta);
-        if (resposta.affectedRows < 1) {
-            return [404, {mensagem:"Produtos não encontrado"}];
-        }else{
-            return [200, {mensagem:'Produtos encontrado'}];
-        }
+        console.log(resposta);
+        return [200, resposta];
     } catch (error) {
         //console.error(error);
         return [500,{
@@ -57,7 +52,7 @@ const mostrarProdutos = async () => {
 
 
 //função para atualizar um produto
-const atualizarProduto = async (id_produtos,nomeProduto) => {
+export const atualizarProduto = async (nomeProduto,id_produtos) => {
     console.log('ProdutoModel :: atualizarProduto')
     const sql = `UPDATE produtos SET nome_produto = ? WHERE id_produtos = ?`
     const params = [nomeProduto,id_produtos];
@@ -65,11 +60,8 @@ const atualizarProduto = async (id_produtos,nomeProduto) => {
    try {
     const [resposta] = await conexao.query(sql);
     //console.log(resposta);
-    if (resposta.affectedRows < 1) {
-        return [404, {mensagem:"Produtos atualizado com sucesso"}];
-    }else{
-        return [200, {mensagem:'Produtos não atualizado'}];
-    }
+    return [200, resposta];
+    
 } catch (error) {
     //console.error(error);
     return [500,{
@@ -81,7 +73,7 @@ const atualizarProduto = async (id_produtos,nomeProduto) => {
 }
 
 //função para deletar um produto
-const deletarProduto = async (id_produtos) => {
+export const deletarProduto = async (id_produtos) => {
     console.log('ProdutoModel :: deletarProduto')
     const sql = `DELETE FROM produtos WHERE id_produtos = ?`
     const params = [id_produtos];
